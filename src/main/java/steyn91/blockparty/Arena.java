@@ -306,7 +306,11 @@ public class Arena {
 
             @Override
             public void run() {
-                if (!gameActive) this.cancel();
+                if (!gameActive){
+                    this.cancel();
+                    return;
+                }
+
 
                 if (count == currentRoundTime){
                     for (Player player : players){
@@ -351,7 +355,10 @@ public class Arena {
 
             @Override
             public void run() {
-                if (!gameActive) this.cancel();
+                if (!gameActive){
+                    this.cancel();
+                    return;
+                }
 
                 count -= 1;
 
