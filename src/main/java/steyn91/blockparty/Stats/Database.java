@@ -138,8 +138,8 @@ public class Database {
             statement.setInt(2, statsModel.getGames());
             statement.setInt(3, statsModel.getRounds());
             statement.setInt(4, statsModel.getBoosters());
-            statement.setDate(4, new Date(new java.util.Date().getTime()));
-            statement.setString(5, playerName);
+            statement.setDate(5, new Date(new java.util.Date().getTime()));
+            statement.setString(6, playerName);
 
             statement.executeUpdate();
             statement.close();

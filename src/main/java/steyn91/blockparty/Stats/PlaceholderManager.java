@@ -15,15 +15,19 @@ public class PlaceholderManager extends PlaceholderExpansion {
         if (StatsManager.getStatsByName(playerName) == null) return "";
 
         if (params.contains("wins")){
-
             return String.valueOf(StatsManager.getStatsByName(playerName).getWins());
-
         }
 
         else if (params.contains(("games"))){
-
             return String.valueOf(StatsManager.getStatsByName(playerName).getGames());
+        }
 
+        else if (params.contains(("rounds"))){
+            return String.valueOf(StatsManager.getStatsByName(playerName).getRounds());
+        }
+
+        else if (params.contains(("boosters"))){
+            return String.valueOf(StatsManager.getStatsByName(playerName).getBoosters());
         }
 
         return "¯|_ツ_|¯";

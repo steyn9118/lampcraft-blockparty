@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.BoundingBox;
 import steyn91.blockparty.Stats.Database;
+import steyn91.blockparty.Stats.PlaceholderManager;
 import steyn91.blockparty.Stats.StatsManager;
 import steyn91.blockparty.commands.bpAdminCommand;
 import steyn91.blockparty.commands.bpCommand;
@@ -37,6 +38,7 @@ public final class Blockparty extends JavaPlugin {
         getCommand("bp").setExecutor(new bpCommand());
         getCommand("bpadmin").setExecutor(new bpAdminCommand());
         Bukkit.getServer().getPluginManager().registerEvents(new playerListeners(), this);
+        new PlaceholderManager().register();
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
@@ -105,11 +107,11 @@ public final class Blockparty extends JavaPlugin {
             List<Integer> spectCorners = configuration.getIntegerList("spectatorsBox");
             BoundingBox spectBox = new BoundingBox(spectCorners.get(0), spectCorners.get(1), spectCorners.get(2), spectCorners.get(3), spectCorners.get(4), spectCorners.get(5));
 
-            arenas.add(new Arena(configuration.getInt("id"), configuration.getString("name"),
+            arenas.add(new Arena(configuration.getInt("id"), configuration.getString("name"), configuration.getInt("lobbyTime"),
                     configuration.getInt("difficulty"), configuration.getInt("timeReduction"), configuration.getInt("cooldown"), configuration.getInt("initialRoundTime"),
-                    configuration.getInt("maxPlayers"), configuration.getInt("minPlayers"), configuration.getLocation("hubLocation"), configuration.getLocation("startLocation"),
+                    configuration.getInt("maxPlayers"), configuration.getInt("minPlayers"), configuration.getLocation("startLocation"), configuration.getLocation("hubLocation"),
                     configuration.getInt("minY"), configuration.getIntegerList("mainFloor"), configuration.getIntegerList("endGameFloor"), patterns,  blocks,
-                    playlist, spectBox));
+                    playlist, spectBox, configuration.getIntegerList("boosterRange")));
         }
     }
 }

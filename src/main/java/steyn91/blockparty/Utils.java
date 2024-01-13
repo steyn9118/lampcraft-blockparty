@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -16,7 +17,7 @@ public class Utils {
 
     public static Arena getArenaOfPlayer(Player player){
         for (Arena arena : plugin.getArenas()){
-            if (arena.getPlayers().contains(player)) return arena;
+            if (arena.getPlayers().contains(player) || arena.getSpectators().contains(player)) return arena;
         }
         return null;
     }
@@ -38,6 +39,13 @@ public class Utils {
     }
 
     public static void resetExpTimer(List<Player> players, boolean toFull){
+        if (toFull) setExpTimer(players, 0, 0, false);
+        else setExpTimer(players, 0, 1, false);
+    }
+
+    public static void resetExpTimer(Player player, boolean toFull){
+        List<Player> players = new ArrayList<>(1);
+        players.add(player);
         if (toFull) setExpTimer(players, 0, 0, false);
         else setExpTimer(players, 0, 1, false);
     }
@@ -78,7 +86,7 @@ public class Utils {
 
     public static void fillHotbar(Player player, ItemStack item){
         for (int i = 0; i < 9; i++){
-            player.getInventory().setItem(i, item);
+            if (player.getInventory().getItem(i) == null) player.getInventory().setItem(i, item);
         }
     }
 }

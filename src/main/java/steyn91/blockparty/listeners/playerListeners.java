@@ -22,7 +22,12 @@ public class playerListeners implements Listener{
     public void onPlayerMovementEvent(PlayerMoveEvent event){
         Arena arena = Utils.getArenaOfPlayer(event.getPlayer());
         if (arena == null) return;
-        if (!arena.getSpectatableArea().contains(event.getPlayer().getLocation().getX(), event.getPlayer().getLocation().getY(), event.getPlayer().getLocation().getZ())) event.getPlayer().teleport(arena.getStartLocation());
+        if (arena.getSpectators().contains(event.getPlayer()) &&
+            !arena.getSpectatableArea().contains(event.getPlayer().getLocation().getX(), event.getPlayer().getLocation().getY(), event.getPlayer().getLocation().getZ())){
+            event.getPlayer().teleport(arena.getStartLocation());
+            return;
+        }
+
         if (arena.getMinY() >= event.getPlayer().getLocation().getBlockY()) arena.death(event.getPlayer());
 
     }
@@ -36,9 +41,16 @@ public class playerListeners implements Listener{
     @EventHandler
     public void onItemPickup(PlayerAttemptPickupItemEvent event){
         Arena arena = Utils.getArenaOfPlayer(event.getPlayer());
-        if (arena != null) arena.boosterPickup(event.getPlayer());
-        event.getItem().remove();
-        event.setCancelled(true);
+        if (arena == null) return;
+        if (arena.getSpectators().contains(event.getPlayer())){
+            event.setCancelled(true);
+            return;
+        }
+        if (arena.getPlayers().contains(event.getPlayer())){
+            arena.boosterPickup(event.getPlayer());
+            event.getItem().remove();
+            event.setCancelled(true);
+        }
     }
 }
 
