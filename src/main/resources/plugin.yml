@@ -1,0 +1,11 @@
+name: Blockparty
+version: '${project.version}'
+main: steyn91.blockparty.Blockparty
+api-version: 1.18
+authors: [ Steyn91 ]
+depend: [NoteBlockAPI]
+commands:
+  bp:
+    description: base command
+  bpadmin:
+    description: admin commands
