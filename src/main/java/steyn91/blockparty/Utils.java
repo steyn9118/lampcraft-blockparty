@@ -2,6 +2,7 @@ package steyn91.blockparty;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +35,7 @@ public class Utils {
             player.setLevel(current);
             if (max == 0) player.setExp(1);
             else player.setExp((float) current / max);
-            if (notify) player.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 100, 1);
+            if (notify) player.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.AMBIENT, 50, 2);
         }
     }
 

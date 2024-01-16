@@ -1,8 +1,10 @@
 package steyn91.blockparty.listeners;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -51,6 +53,12 @@ public class playerListeners implements Listener{
             event.getItem().remove();
             event.setCancelled(true);
         }
+    }
+
+    // Предотвращает склеивание бустеров
+    @EventHandler
+    public void itemMerge(ItemMergeEvent event){
+        if (event.getEntity().getItemStack().getType().equals(Material.NOTE_BLOCK)) event.setCancelled(true);
     }
 }
 

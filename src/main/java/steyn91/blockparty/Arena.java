@@ -2,7 +2,6 @@ package steyn91.blockparty;
 
 import com.xxmicloxx.NoteBlockAPI.model.Playlist;
 import com.xxmicloxx.NoteBlockAPI.model.RepeatMode;
-import com.xxmicloxx.NoteBlockAPI.model.playmode.ChannelMode;
 import com.xxmicloxx.NoteBlockAPI.model.playmode.MonoStereoMode;
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
 import net.kyori.adventure.bossbar.BossBar;
@@ -23,7 +22,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BoundingBox;
-import org.checkerframework.checker.units.qual.C;
 import steyn91.blockparty.Stats.StatsManager;
 
 import java.util.*;
@@ -50,10 +48,11 @@ public class Arena {
     private final int lobbyTime;
     private final BoundingBox spectatableArea;
     private final List<Integer> boosterRange;
+    private final Playlist playlist;
 
     // Технические
     private final Blockparty plugin = Blockparty.getPlugin();
-    private final RadioSongPlayer songPlayer;
+    private RadioSongPlayer songPlayer;
     private final Component arenaFullMessage = Component.text("Арена уже заполнена или на ней идёт игра, поэтому вы присоединены как наблюдатель").color(NamedTextColor.RED);
     private final Component loseMessage = Component.text("Вы проиграли!").color(NamedTextColor.RED);
     private final Component winMessage = Component.text("Вы победили!").color(NamedTextColor.GREEN);
@@ -117,11 +116,9 @@ public class Arena {
         this.patterns = patterns;
         this.blocksPalette = blocksPalette;
 
-        this.songPlayer = new RadioSongPlayer(playlist);
-        this.songPlayer.setRandom(true);
-        this.songPlayer.setRepeatMode(RepeatMode.ALL);
-        this.songPlayer.setCategory(com.xxmicloxx.NoteBlockAPI.model.SoundCategory.RECORDS);
-        this.songPlayer.setChannelMode(new MonoStereoMode());
+        this.playlist = playlist;
+
+        playNextSong();
 
         this.spectatableArea = spectatableArea;
         this.boosterRange = boosterRange;
@@ -218,6 +215,8 @@ public class Arena {
         bossBar.color(BossBar.Color.RED);
         bossBar.name(Component.text("Текущая сложность: " + currentRoundTime + " секунд").color(NamedTextColor.WHITE));
 
+        songPlayer.destroy();
+        playNextSong();
         songPlayer.setPlaying(true);
 
         nextBlock = Utils.getRandomBlock(blocksPalette, null);
@@ -283,7 +282,7 @@ public class Arena {
         bossBar.name(Component.text("Ждём игроков...").color(NamedTextColor.WHITE));
 
         songPlayer.setPlaying(false);
-        songPlayer.playNextSong();
+
         players.clear();
         spectators.clear();
 
@@ -310,7 +309,6 @@ public class Arena {
                     this.cancel();
                     return;
                 }
-
 
                 if (count == currentRoundTime){
                     for (Player player : players){
@@ -496,4 +494,10 @@ public class Arena {
         }
     }
 
+    private void playNextSong(){
+        songPlayer = new RadioSongPlayer(playlist.get(new Random().nextInt(playlist.getCount())));
+        songPlayer.setRepeatMode(RepeatMode.ONE);
+        songPlayer.setCategory(com.xxmicloxx.NoteBlockAPI.model.SoundCategory.RECORDS);
+        songPlayer.setChannelMode(new MonoStereoMode());
+    }
 }
