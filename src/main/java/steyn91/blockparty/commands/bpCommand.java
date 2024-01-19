@@ -30,25 +30,29 @@ public class bpCommand implements CommandExecutor {
                 case (1):
                     // LEAVE
                     if (args[0].equalsIgnoreCase("leave")){
-                        Player p = (Player) sender;
-                        Utils.getArenaOfPlayer(p).leave(p);
+                        Player player = (Player) sender;
+                        Arena arena = Utils.getArenaOfPlayer(player);
+                        if (arena == null) return false;
+                        arena.leave(player);
                     }
                     if (!sender.hasPermission("blockparty.list")) return false;
                     // LIST
                     else if (args[0].equalsIgnoreCase("list")){
-                        Player p = (Player) sender;
+                        Player player = (Player) sender;
                         List<Arena> arenas = plugin.getArenas();
-                        p.sendMessage(ChatColor.YELLOW + "Список доступных арен:");
+                        player.sendMessage(ChatColor.YELLOW + "Список доступных арен:");
                         for (Arena arena : arenas) {
-                            p.sendMessage(Component.text("ID " + arena.getId()));
+                            player.sendMessage(Component.text("ID " + arena.getId()));
                         }
                     }
                 case (3):
                     // JOIN
                     if (args[0].equalsIgnoreCase("join" ) && sender.hasPermission("blockparty.join")){
-                        Player p = Bukkit.getPlayer(args[1]);
-                        assert p != null;
-                        Utils.getArenaByID(Integer.parseInt(args[2])).join(p);
+                        Player player = Bukkit.getPlayer(args[1]);
+                        if (player == null) return false;
+                        Arena arena = Utils.getArenaByID(Integer.parseInt(args[2]));
+                        if (arena == null) return false;
+                        arena.join(player);
                     }
             }
         }
