@@ -388,6 +388,7 @@ public class Arena {
         player.getInventory().clear();
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "cmi kit bp " + player.getName());
         spectators.add(player);
+        Utils.resetExpTimer(player, false);
         Utils.hidePlayer(players, player);
         Utils.showPlayersToPlayer(spectators, player);
         player.setAllowFlight(true);
@@ -414,15 +415,17 @@ public class Arena {
         songPlayer.removePlayer(player);
     }
 
-    public void boosterPickup(Player player){
+    public void boosterPickup(Player player) {
         player.playSound(player, Sound.ITEM_BOTTLE_FILL_DRAGONBREATH, 100, 2);
         StatsManager.updateBoosterCollected(player.getName());
-        switch (new Random().nextInt(3)){
+        switch (new Random().nextInt(3)) {
             case (0):
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 15, 1));
+                player.sendMessage(Component.text("Ты подобрал бустер СКОРОСТИ!").color(NamedTextColor.GREEN));
                 player.sendActionBar(Component.text("Ты подобрал бустер СКОРОСТИ!").color(NamedTextColor.GREEN));
                 break;
             case (1):
+                player.sendMessage(Component.text("Ты подобрал бустер ПОДСКАЗКУ!").color(NamedTextColor.GREEN));
                 player.sendActionBar(Component.text("Ты подобрал бустер ПОДСКАЗКУ!").color(NamedTextColor.GREEN));
                 ItemStack item = new ItemStack(nextBlock);
                 ItemMeta meta = item.getItemMeta();
@@ -431,6 +434,7 @@ public class Arena {
                 player.getInventory().setItem(0, item);
                 break;
             case (2):
+                player.sendMessage(Component.text("Ты подобрал бустер ПЛАТФОРМУ!").color(NamedTextColor.GREEN));
                 player.sendActionBar(Component.text("Ты подобрал бустер ПЛАТФОРМУ!").color(NamedTextColor.GREEN));
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "fill " + (player.getLocation().getBlockX() - 1) + " " + mainFloor.get(1) + " " + (player.getLocation().getBlockZ() - 1) + " " + (player.getLocation().getBlockX() + 1) + " " + mainFloor.get(4) + " " + (player.getLocation().getBlockZ() + 1) + " minecraft:" + currentBlock.toString().toLowerCase(Locale.ROOT));
                 break;
