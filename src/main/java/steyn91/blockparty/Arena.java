@@ -396,7 +396,6 @@ public class Arena {
     }
 
     private void clearPlayer(Player player){
-        plugin.getLogger().info("Очищен " + player.getName());
         if (players.contains(player)){
             players.remove(player);
             Utils.showPlayersToPlayer(spectators, player);
